@@ -26,4 +26,25 @@ fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), ,maxScale(i, n)) * n
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.inverse() + scaleFactor() * b.inverse()
-fun Float.updateValue(dir : Int, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap 
+fun Float.updateValue(dir : Int, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+fun Int.sf() : Float = 1f - 2 * this
+
+fun Canvas.drawLOCNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val size : Float = gap / sizeFactor
+    save()
+    translate(w / 2, gap * (i + 1))
+    drawLine(-size, -size, -size + 2 * size * sc1.divideScale(0, 2), -size, paint)
+    for (j in 0..(lines - 1)) {
+        save()
+        translate(-size + 2 * size * j, 0f)
+        rotate(-90f * j.sf() * sc2.divideScale(j, lines))
+        drawLine(0f, 0f, size * j.sf(), 0f, paint)
+        restore()
+    }
+    restore()
+}
