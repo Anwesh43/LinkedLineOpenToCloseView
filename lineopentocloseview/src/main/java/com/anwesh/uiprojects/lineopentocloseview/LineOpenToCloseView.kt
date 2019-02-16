@@ -180,4 +180,25 @@ class LineOpenToCloseView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : LineOpenToCloseView) {
+
+        private var loc : LineOpenToClose = LineOpenToClose(0)
+        private val animator : Animator = Animator(view)
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            loc.draw(canvas, paint)
+            animator.animate {
+                loc.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            loc.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
