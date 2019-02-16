@@ -36,13 +36,22 @@ fun Canvas.drawLOCNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(w / 2, gap * (i + 1))
-    drawLine(-size, -size, -size + 2 * size * sc1.divideScale(0, 2), -size, paint)
+    for (j in 0..(lines - 1)) {
+        val sc : Float = sc2.divideScale(j, lines)
+        save()
+        translate(-size + 2 * size * j, -size)
+        drawLine(0f, 0f, size * j.sf() * sc, 0f, paint)
+        restore()
+    }
     for (j in 0..(lines - 1)) {
         save()
         translate(-size + 2 * size * j, 0f)
-        rotate(-90f * j.sf() * sc2.divideScale(j, lines))
+        rotate(-90f * j.sf() * sc1.divideScale(j, lines))
         drawLine(0f, 0f, size * j.sf(), 0f, paint)
         restore()
     }
