@@ -202,4 +202,13 @@ class LineOpenToCloseView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : LineOpenToCloseView {
+            val view : LineOpenToCloseView = LineOpenToCloseView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
